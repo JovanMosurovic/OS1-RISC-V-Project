@@ -16,6 +16,9 @@ public:
     void* allocate(size_t sizeInBlocks) const;
     int free(void* ptr) const;
 
+    size_t getFreeSpace() const;
+    size_t getLargestFreeBlock() const;
+
     MemoryAllocator(const MemoryAllocator&) = delete;
     MemoryAllocator& operator=(const MemoryAllocator&) = delete;
 

@@ -103,5 +103,33 @@ int MemoryAllocator::free(void *ptr) const {
     return 0;
 }
 
+size_t MemoryAllocator::getFreeSpace() const {
+    size_t freeSpace = 0;
+    BlockHeader* current = freeListHead;
+
+    while (current) {
+        if (current->isFree) {
+            freeSpace += current->dataSize * MEM_BLOCK_SIZE;
+        }
+        current = current->next;
+    }
+
+    return freeSpace;
+}
+
+size_t MemoryAllocator::getLargestFreeBlock() const {
+    size_t maxSize = 0;
+    BlockHeader* current = freeListHead;
+
+    while (current) {
+        if (current->isFree && current->dataSize > maxSize) {
+            maxSize = current->dataSize;
+        }
+        current = current->next;
+    }
+
+    return maxSize * MEM_BLOCK_SIZE;
+}
+
 
 
