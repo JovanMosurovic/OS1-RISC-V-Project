@@ -18,6 +18,15 @@ void TCB::yield()
     __asm__ volatile ("ecall");
 }
 
+int TCB::thread_exit() {
+    if (!running) return -1;
+
+    running->setFinished(true);
+    yield();
+
+    return 0;
+}
+
 void TCB::dispatch()
 {
     TCB *old = running;

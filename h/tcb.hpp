@@ -24,6 +24,8 @@ public:
 
     static void yield();
 
+    static int thread_exit();
+
     static TCB *running;
 
 private:
