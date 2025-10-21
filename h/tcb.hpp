@@ -52,6 +52,7 @@ private:
     bool finished;
 
     friend class Riscv;
+    friend class Semaphore;
 
     static void threadWrapper();
 
