@@ -18,8 +18,6 @@ public:
 
     void setFinished(bool value) { finished = value; }
 
-    uint64 getTimeSlice() const { return timeSlice; }
-
     using Body = void (*)();
 
     static TCB *createThread(Body body);
@@ -29,13 +27,12 @@ public:
     static TCB *running;
 
 private:
-    TCB(Body body, uint64 timeSlice) :
+    TCB(Body body) :
             body(body),
             stack(body != nullptr ? new uint64[STACK_SIZE] : nullptr),
             context({(uint64) &threadWrapper,
                      stack != nullptr ? (uint64) &stack[STACK_SIZE] : 0
                     }),
-            timeSlice(timeSlice),
             finished(false)
     {
         if (body != nullptr) { Scheduler::put(this); }
@@ -50,7 +47,6 @@ private:
     Body body;
     uint64 *stack;
     Context context;
-    uint64 timeSlice;
     bool finished;
 
     friend class Riscv;
@@ -61,10 +57,8 @@ private:
 
     static void dispatch();
 
-    static uint64 timeSliceCounter;
 
     static uint64 constexpr STACK_SIZE = 1024;
-    static uint64 constexpr TIME_SLICE = 2;
 };
 
 #endif //OS1_VEZBE07_RISCV_CONTEXT_SWITCH_2_INTERRUPT_TCB_HPP

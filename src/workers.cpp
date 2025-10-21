@@ -19,7 +19,7 @@ void workerBodyA()
             {
                 // busy wait
             }
-//            TCB::yield();
+            TCB::yield();
         }
     }
 }
@@ -37,7 +37,7 @@ void workerBodyB()
             {
                 // busy wait
             }
-//            TCB::yield();
+            TCB::yield();
         }
     }
 }
@@ -81,7 +81,7 @@ void workerBodyC()
         printInteger(i);
         printString("\n");
     }
-//    TCB::yield();
+    TCB::yield();
 }
 
 void workerBodyD()
@@ -109,5 +109,5 @@ void workerBodyD()
         printInteger(i);
         printString("\n");
     }
-//    TCB::yield();
+    TCB::yield();
 }
