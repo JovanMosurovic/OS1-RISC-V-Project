@@ -20,4 +20,10 @@
 #define SYS_SEM_WAIT                        0x23
 #define SYS_SEM_SIGNAL                      0x24
 
+#define SYS_TIME_SLEEP                      0x31
+
+// Console
+#define SYS_GETC                            0x41
+#define SYS_PUTC                            0x42
+
 #endif //OS1_RISC_V_PROJECT_SYSCALL_CODES_HPP

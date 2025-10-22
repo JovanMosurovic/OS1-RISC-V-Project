@@ -54,6 +54,16 @@ int Semaphore::signal() {
     return sem_signal(myHandle);
 }
 
+// Console - not implemented, used from lib
+
+char Console::getc() {
+    return 0;
+}
+
+void Console::putc(char) {}
+
+
+
 
 
 

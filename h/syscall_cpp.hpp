@@ -1,7 +1,7 @@
 #ifndef OS1_RISC_V_PROJECT_SYSCALL_CPP_HPP
 #define OS1_RISC_V_PROJECT_SYSCALL_CPP_HPP
 
-#include "syscall_c.hpp"
+#include "syscall_c.h"
 
 // Memory management
 
@@ -49,6 +49,14 @@ public:
 
 private:
     sem_t myHandle;
+};
+
+// Console - used from lib
+
+class Console {
+public:
+    static char getc ();
+    static void putc (char);
 };
 
 #endif //OS1_RISC_V_PROJECT_SYSCALL_CPP_HPP

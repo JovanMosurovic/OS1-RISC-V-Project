@@ -1,7 +1,7 @@
 #include "../h/MemoryAllocator.hpp"
 #include "../h/tcb.hpp"
 #include "../h/KernelSemaphore.hpp"
-#include "../h/syscall_c.hpp"
+#include "../h/syscall_c.h"
 #include "../h/syscall_codes.hpp"
 
 void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {

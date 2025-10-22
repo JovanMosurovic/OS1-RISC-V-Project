@@ -26,4 +26,13 @@ int sem_close(sem_t handle);
 int sem_wait(sem_t id);
 int sem_signal(sem_t id);
 
+typedef unsigned long time_t;
+int time_sleep(time_t);
+
+// Console - not implemented, used from lib
+const int EOF = -1;
+
+char getc();
+void putc(char);
+
 #endif //OS1_RISC_V_PROJECT_SYSCALL_C_HPP
