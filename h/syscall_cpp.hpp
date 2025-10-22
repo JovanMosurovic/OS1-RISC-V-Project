@@ -5,11 +5,12 @@
 
 // Memory management
 
-void *operator new(size_t size);
-void operator delete(void *ptr) noexcept;
-
-void *operator new[](size_t size);
-void operator delete[](void *ptr) noexcept;
+// ALREADY DONE IN operators.cpp
+// void *operator new(size_t size);
+// void operator delete(void *ptr) noexcept;
+//
+// void *operator new[](size_t size);
+// void operator delete[](void *ptr) noexcept;
 
 // Thread
 

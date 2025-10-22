@@ -1,15 +1,15 @@
-#include "../h/semaphore.hpp"
+#include "../h/KernelSemaphore.hpp"
 
-Semaphore::Semaphore(uint64 init) : value(init) {}
+KernelSemaphore::KernelSemaphore(uint64 init) : value(init) {}
 
-Semaphore::~Semaphore() {
+KernelSemaphore::~KernelSemaphore() {
     while (blockedQueue.peekFirst()) {
         TCB* tcb = blockedQueue.removeFirst();
         Scheduler::put(tcb);
     }
 }
 
-int Semaphore::wait() {
+int KernelSemaphore::wait() {
 
     value--;
 
@@ -34,7 +34,7 @@ int Semaphore::wait() {
     return 0;
 }
 
-int Semaphore::signal() {
+int KernelSemaphore::signal() {
 
     value++;
 

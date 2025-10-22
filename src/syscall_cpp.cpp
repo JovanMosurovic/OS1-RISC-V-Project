@@ -1,23 +1,5 @@
 #include "../h/syscall_cpp.hpp"
 
-// Memory management
-
-void* operator new(size_t size) {
-    return mem_alloc(size);
-}
-
-void operator delete(void* ptr) noexcept {
-    mem_free(ptr);
-}
-
-void* operator new[](size_t size) {
-    return mem_alloc(size);
-}
-
-void operator delete[](void* ptr) noexcept {
-    mem_free(ptr);
-}
-
 // Thread
 
 Thread::Thread(void(*body)(void *), void *arg) : myHandle(nullptr), body(body), arg(arg) {}
