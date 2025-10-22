@@ -20,6 +20,9 @@ TCB *TCB::createKernelThread(Body body, void* arg)
 
 void TCB::yield()
 {
+    if (running && running->getPrivilege() == PRIVILEGE_SUPERVISOR) {
+        dispatch();
+    }
     __asm__ volatile ("ecall");
 }
 
