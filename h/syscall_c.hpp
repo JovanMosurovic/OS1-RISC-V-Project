@@ -4,10 +4,10 @@
 #define OS1_RISC_V_PROJECT_SYSCALL_C_HPP
 
 #include "../h/tcb.hpp"
-#include "../h/semaphore.hpp"
+#include "../h/KernelSemaphore.hpp"
 
 typedef TCB* thread_t;
-typedef Semaphore* sem_t;
+typedef KernelSemaphore* sem_t;
 
 // Memory management
 void* mem_alloc(size_t size);

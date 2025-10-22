@@ -1,10 +1,8 @@
 #include "../h/MemoryAllocator.hpp"
 #include "../h/tcb.hpp"
-#include "../h/semaphore.hpp"
+#include "../h/KernelSemaphore.hpp"
 #include "../h/syscall_c.hpp"
 #include "../h/syscall_codes.hpp"
-
-
 
 void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
     switch (code) {
@@ -82,7 +80,7 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
                 break;
             }
 
-            Semaphore* sem = new Semaphore(init);
+            KernelSemaphore* sem = new KernelSemaphore(init);
 
             if (!sem) {
                 *retVal = -2;

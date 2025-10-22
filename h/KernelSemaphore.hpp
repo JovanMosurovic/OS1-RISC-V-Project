@@ -7,10 +7,10 @@
 #include "tcb.hpp"
 
 
-class Semaphore {
+class KernelSemaphore {
 public:
-    Semaphore(uint64 init = 1);
-    ~Semaphore();
+    KernelSemaphore(uint64 init = 1);
+    ~KernelSemaphore();
 
     int wait();
     int signal();
@@ -25,8 +25,8 @@ private:
     int value;
     List<TCB> blockedQueue;
 
-    Semaphore(const Semaphore&) = delete;
-    Semaphore& operator=(const Semaphore&) = delete;
+    KernelSemaphore(const KernelSemaphore&) = delete;
+    KernelSemaphore& operator=(const KernelSemaphore&) = delete;
 };
 
 #endif //OS1_RISC_V_PROJECT_SEMAPHORE_HPP
