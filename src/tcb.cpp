@@ -8,9 +8,14 @@
 TCB *TCB::running = nullptr;
 
 
-TCB *TCB::createThread(Body body)
+TCB *TCB::createThread(Body body, void *arg, ThreadPrivilege priv) {
+    return new TCB(body, arg, priv);
+}
+
+
+TCB *TCB::createKernelThread(Body body)
 {
-    return new TCB(body);
+    return new TCB(body, arg, PRIVILEGE_SUPERVISOR);
 }
 
 void TCB::yield()
@@ -33,13 +38,15 @@ void TCB::dispatch()
     if (!old->isFinished()) { Scheduler::put(old); }
     running = Scheduler::get();
 
-    TCB::contextSwitch(&old->context, &running->context);
+    if (running) {
+        TCB::contextSwitch(&old->context, &running->context);
+    }
 }
 
 void TCB::threadWrapper()
 {
     Riscv::popSppSpie();
-    running->body();
+    running->body(running->arg);
     running->setFinished(true);
     TCB::yield();
 }

@@ -8,6 +8,11 @@
 #include "../lib/hw.h"
 #include "scheduler.hpp"
 
+enum ThreadPrivilege {
+    PRIVILEGE_USER = 0,         // User mode (U-mode)
+    PRIVILEGE_SUPERVISOR = 1    // Supervisor mode (S-mode)
+};
+
 // Thread Control Block
 class TCB
 {
@@ -15,22 +20,26 @@ public:
     ~TCB() { delete[] stack; }
 
     bool isFinished() const { return finished; }
-
     void setFinished(bool value) { finished = value; }
 
-    using Body = void (*)();
+    ThreadPrivilege getPrivilege() const { return privilege; }
+    void setPrivilege(ThreadPrivilege priv) { privilege = priv; }
 
-    static TCB *createThread(Body body);
+    using Body = void (*)(void*);
+
+    static TCB* createThread(Body body, void* arg = nullptr, ThreadPrivilege priv = PRIVILEGE_USER);
+    static TCB *createKernelThread(Body body, void* arg = nullptr);
 
     static void yield();
-
     static int thread_exit();
 
     static TCB *running;
 
 private:
-    TCB(Body body) :
+    TCB(Body body, void* arg, ThreadPrivilege priv) :
             body(body),
+            arg(arg),
+            privilege(priv),
             stack(body != nullptr ? new uint64[STACK_SIZE] : nullptr),
             context({(uint64) &threadWrapper,
                      stack != nullptr ? (uint64) &stack[STACK_SIZE] : 0
@@ -47,6 +56,8 @@ private:
     };
 
     Body body;
+    void* arg;
+    ThreadPrivilege privilege;
     uint64 *stack;
     Context context;
     bool finished;
