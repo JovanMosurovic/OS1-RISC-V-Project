@@ -18,7 +18,7 @@ int mem_free(void *ptr) {
 // Thread management
 
 int thread_create(thread_t *handle, void (*start_routine)(void *), void *arg) {
-    return (int)syscall2(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine());
+    return (int)syscall2(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine);
 }
 
 void thread_dispatch() {

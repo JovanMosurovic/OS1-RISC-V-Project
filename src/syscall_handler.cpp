@@ -32,7 +32,7 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
         }
 
         case SYS_MEM_GET_LARGEST_FREE__BLOCK: {
-            size_t largestBlock = MemoryAllocator::getLargestFreeBlock();
+            size_t largestBlock = MemoryAllocator::getInstance().getLargestFreeBlock();
             *retVal = largestBlock;
             break;
         }
@@ -41,7 +41,8 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
 
         case SYS_THREAD_CREATE: {
             thread_t* handle = (thread_t*)arg1;
-            void (*start_routine)(void) = (void(*)(void))arg2;
+            using Body = void (*)(void*);
+            Body start_routine = (Body)arg2;
 
             if (!handle || !start_routine) {
                 *retVal = -1;
@@ -66,7 +67,7 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
         }
 
         case SYS_THREAD_DISPATCH: {
-            TCB::dispatch();
+            // TCB::dispatch();
             *retVal = 0;
             break;
         }

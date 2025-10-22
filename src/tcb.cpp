@@ -13,7 +13,7 @@ TCB *TCB::createThread(Body body, void *arg, ThreadPrivilege priv) {
 }
 
 
-TCB *TCB::createKernelThread(Body body)
+TCB *TCB::createKernelThread(Body body, void* arg)
 {
     return new TCB(body, arg, PRIVILEGE_SUPERVISOR);
 }
