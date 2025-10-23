@@ -12,8 +12,7 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64
 
         case SYS_MEM_ALLOC: {
             size_t size = (size_t)arg1;
-            size_t blocks = (size + MEM_BLOCK_SIZE - 1) / MEM_BLOCK_SIZE;
-            void* ptr = MemoryAllocator::getInstance().allocate(blocks);
+            void* ptr = MemoryAllocator::getInstance().allocate(size);
             *retVal = (uint64)ptr;
             break;
         }

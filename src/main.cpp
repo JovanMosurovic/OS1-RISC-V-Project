@@ -20,11 +20,10 @@ int main()
     Riscv::w_stvec((uint64) &Riscv::supervisorTrap);
 
 
-    kernel = TCB::createThread(nullptr, nullptr);
-    kernel->setPrivilege(PRIVILEGE_SUPERVISOR);
+    kernel = TCB::createKernelThread(nullptr, nullptr);
     TCB::running = kernel;
 
-    user = TCB::createThread(reinterpret_cast<void (*)(void *)>(userMain), nullptr);
+    user = TCB::createThread(reinterpret_cast<void (*)(void *)>(userMain), nullptr, mem_alloc(DEFAULT_STACK_SIZE));
     while(!user->isFinished()) {
         thread_dispatch();
     }

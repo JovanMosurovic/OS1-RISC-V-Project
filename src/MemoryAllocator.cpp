@@ -42,8 +42,10 @@ void MemoryAllocator::coalesce() const {
     }
 }
 
-void *MemoryAllocator::allocate(const size_t sizeInBlocks) const {
-    if (sizeInBlocks == 0) return nullptr;
+void *MemoryAllocator::allocate(const size_t sizeInBytes) const {
+    if (sizeInBytes == 0) return nullptr;
+
+    const size_t sizeInBlocks = (sizeInBytes + MEM_BLOCK_SIZE - 1) / MEM_BLOCK_SIZE;
 
     BlockHeader* bestFit = nullptr;
     BlockHeader *current = freeListHead;

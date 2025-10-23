@@ -13,7 +13,7 @@ class MemoryAllocator {
 public:
     static MemoryAllocator& getInstance();
 
-    void* allocate(size_t sizeInBlocks) const;
+    void* allocate(size_t sizeInBytes) const;
     int free(void* ptr) const;
 
     size_t getFreeSpace() const;
