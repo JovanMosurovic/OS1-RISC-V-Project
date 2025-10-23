@@ -44,6 +44,20 @@ int sem_signal(sem_t id) {
 }
 
 
+// For API ( not implemented )
+
+int time_sleep(time_t) {
+    return 0;
+}
+
+char getc() {
+    return 0;
+}
+
+void putc(char) {
+}
+
+
 
 
 

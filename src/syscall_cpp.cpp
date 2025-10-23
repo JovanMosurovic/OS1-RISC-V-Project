@@ -4,6 +4,8 @@
 
 Thread::Thread(void(*body)(void *), void *arg) : myHandle(nullptr), body(body), arg(arg) {}
 
+Thread::~Thread() {}
+
 void Thread::threadWrapper(void *threadPtr) {
     Thread* thread = (Thread*)threadPtr;
 
@@ -14,10 +16,6 @@ void Thread::threadWrapper(void *threadPtr) {
         // Virtual run() based thread
         thread->run();
     }
-}
-
-Thread::~Thread() {
-
 }
 
 int Thread::start() {
@@ -32,6 +30,9 @@ void Thread::dispatch() {
 int Thread::sleep(time_t) {
     // Not implemented
     return 0;
+}
+
+Thread::Thread() {
 }
 
 // Semaphore
