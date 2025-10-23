@@ -2,6 +2,7 @@
 #define OS1_RISC_V_PROJECT_SYSCALL_CPP_HPP
 
 #include "syscall_c.h"
+#include "../lib/console.h"
 
 // Memory management
 
@@ -55,8 +56,12 @@ private:
 
 class Console {
 public:
-    static char getc ();
-    static void putc (char);
+    static char getc () {
+        return ::getc();
+    };
+    static void putc (char character) {
+        ::putc(character);
+    };
 };
 
 #endif //OS1_RISC_V_PROJECT_SYSCALL_CPP_HPP

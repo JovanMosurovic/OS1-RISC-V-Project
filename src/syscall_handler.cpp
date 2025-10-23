@@ -3,6 +3,7 @@
 #include "../h/KernelSemaphore.hpp"
 #include "../h/syscall_c.h"
 #include "../h/syscall_codes.hpp"
+#include "../lib/console.h"
 
 void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
     switch (code) {
@@ -125,6 +126,20 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
             }
 
             *retVal = id->signal();
+            break;
+        }
+
+        // Console
+        case SYS_GETC: {
+            char c = __getc();
+            *retVal = (uint64)c;
+            break;
+        }
+
+        case SYS_PUTC: {
+            char c = (char)arg1;
+            __putc(c);
+            *retVal = 0;
             break;
         }
 

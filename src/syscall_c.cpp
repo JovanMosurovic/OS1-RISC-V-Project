@@ -2,6 +2,7 @@
 
 #include "../h/syscall_asm.hpp"
 #include "../h/syscall_codes.hpp"
+#include "../lib/console.h"
 
 using namespace SyscallAsm;
 
@@ -18,7 +19,7 @@ int mem_free(void *ptr) {
 // Thread management
 
 int thread_create(thread_t *handle, void (*start_routine)(void *), void *arg) {
-    return (int)syscall2(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine);
+    return (int)syscall3(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine, (uint64)arg);
 }
 
 void thread_dispatch() {
@@ -36,7 +37,7 @@ int sem_close(sem_t handle) {
 }
 
 int sem_wait(sem_t id) {
-    return (int)syscall1(SYS_SEM_CLOSE, (uint64)id);
+    return (int)syscall1(SYS_SEM_WAIT, (uint64)id);
 }
 
 int sem_signal(sem_t id) {
@@ -44,17 +45,20 @@ int sem_signal(sem_t id) {
 }
 
 
-// For API ( not implemented )
+// Time
 
 int time_sleep(time_t) {
     return 0;
 }
 
+// Console - using lib functions
+
 char getc() {
-    return 0;
+    return (char)syscall0(SYS_GETC);
 }
 
-void putc(char) {
+void putc(char character) {
+    syscall1(SYS_PUTC, (uint64)character);
 }
 
 
