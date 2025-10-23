@@ -27,9 +27,7 @@ public:
 
     using Body = void (*)(void*);
 
-    static TCB* createThread(Body body, void* arg, void* stack_space);
-    static TCB* createThreadSimple(Body body, void* arg = nullptr, ThreadPrivilege priv = PRIVILEGE_USER);
-    static TCB* createKernelThread(Body body, void* arg = nullptr);
+    static TCB* createThread(Body body, void* arg, void* stack);
 
     static void yield();
     static int thread_exit();
@@ -39,34 +37,19 @@ public:
     static TCB *running;
 
 private:
-    // Constructor that receives an already allocated stack (for ABI call)
-    TCB(Body body, void* arg, void* stack_space, ThreadPrivilege priv) :
-            body(body),
-            arg(arg),
-            privilege(priv),
-            stack((uint64*)stack_space),
-            stackOwner(false),
-            context({(uint64) &threadWrapper,(uint64)stack_space}),
-            finished(false)
-    {
+    TCB(Body body, void* arg, void* stack) {
+        this->body = body;
+        this->arg = arg;
+        this->stack = (uint64 *)stack;
+        this->privilege = PRIVILEGE_USER;
+        this->context = {
+            (uint64) &threadWrapper,
+            this->stack != nullptr ? (uint64) &this->stack[STACK_SIZE] : 0
+        };
+        this->finished = false;
+
         if (body != nullptr) { Scheduler::put(this); }
     }
-
-    // Constructor that allocates the stack itself (for internal use)
-    TCB(Body body, void* arg, ThreadPrivilege priv) :
-            body(body),
-            arg(arg),
-            privilege(priv),
-            stack(body != nullptr ? new uint64[STACK_SIZE] : nullptr),
-            stackOwner(true),
-            context({(uint64) &threadWrapper,
-                     stack != nullptr ? (uint64) &stack[STACK_SIZE] : 0
-                    }),
-            finished(false)
-    {
-        if (body != nullptr) { Scheduler::put(this); }
-    }
-
 
     struct Context
     {
@@ -78,7 +61,6 @@ private:
     void* arg;
     ThreadPrivilege privilege;
     uint64 *stack;
-    bool stackOwner;
     Context context;
     bool finished;
 

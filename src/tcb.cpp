@@ -7,28 +7,13 @@
 
 TCB *TCB::running = nullptr;
 
-
-// For C API -> already allocated stack
-TCB *TCB::createThread(Body body, void *arg, void* stack_space) {
-    if (!body || !stack_space) return nullptr;
-    return new TCB(body, arg, stack_space, PRIVILEGE_USER);
-}
-
-// For already allocated stack
-TCB *TCB::createThreadSimple(Body body, void *arg, ThreadPrivilege priv) {
-    return new TCB(body, arg, priv);
-}
-
-TCB *TCB::createKernelThread(Body body, void* arg)
-{
-    return new TCB(body, arg, PRIVILEGE_SUPERVISOR);
+TCB * TCB::createThread(Body body, void *arg, void *stack) {
+    return new TCB(body, arg, stack);
 }
 
 void TCB::yield()
 {
-    if (running && running->getPrivilege() == PRIVILEGE_SUPERVISOR) {
-        dispatch();
-    }
+    __asm__ volatile("li a0,0x13");
     __asm__ volatile ("ecall");
 }
 
@@ -44,10 +29,10 @@ int TCB::thread_exit() {
 void TCB::dispatch()
 {
     TCB *old = running;
-    if (!old->isFinished()) { Scheduler::put(old); }
+    if (old && !old->isFinished()) { Scheduler::put(old); }
     running = Scheduler::get();
 
-    if (running) {
+    if (running && running != old) {
         TCB::contextSwitch(&old->context, &running->context);
     }
 }
