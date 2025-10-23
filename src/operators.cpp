@@ -1,8 +1,7 @@
 #include "../h/MemoryAllocator.hpp"
 
 void* operator new(size_t size) {
-    size_t sizeInBlocks = (size + MEM_BLOCK_SIZE - 1) / MEM_BLOCK_SIZE;
-    return MemoryAllocator::getInstance().allocate(sizeInBlocks);
+    return MemoryAllocator::getInstance().allocate(size);
 }
 
 void operator delete(void* ptr) noexcept {
@@ -10,8 +9,7 @@ void operator delete(void* ptr) noexcept {
 }
 
 void* operator new[](size_t size) {
-    size_t sizeInBlocks = (size + MEM_BLOCK_SIZE - 1) / MEM_BLOCK_SIZE;
-    return MemoryAllocator::getInstance().allocate(sizeInBlocks);
+    return MemoryAllocator::getInstance().allocate(size);
 }
 
 void operator delete[](void* ptr) noexcept {
