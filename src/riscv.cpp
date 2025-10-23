@@ -10,6 +10,7 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64
 
 void Riscv::popSppSpie()
 {
+    Riscv::mc_sstatus(Riscv::SSTATUS_SPP);
     __asm__ volatile("csrw sepc, ra");
     __asm__ volatile("sret");
 }
@@ -37,7 +38,6 @@ void Riscv::handleSupervisorTrap()
         // Return value -> a0
         __asm__ volatile ("mv a0, %0" : : "r"(retVal));
 
-        TCB::dispatch();
         w_sstatus(sstatus);
         w_sepc(sepc);
     }
