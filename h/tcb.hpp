@@ -34,6 +34,8 @@ public:
     static void yield();
     static int thread_exit();
 
+    static void dispatch();
+
     static TCB *running;
 
 private:
@@ -86,8 +88,6 @@ private:
     static void threadWrapper();
 
     static void contextSwitch(Context *oldContext, Context *runningContext);
-
-    static void dispatch();
 
 
     static uint64 constexpr STACK_SIZE = 1024;

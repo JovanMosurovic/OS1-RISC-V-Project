@@ -68,7 +68,7 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64
         }
 
         case SYS_THREAD_DISPATCH: {
-            // TCB::dispatch();
+            TCB::dispatch();
             *retVal = 0;
             break;
         }
