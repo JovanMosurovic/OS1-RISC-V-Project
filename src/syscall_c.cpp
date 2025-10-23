@@ -36,7 +36,6 @@ int thread_exit() {
     return (int)syscall0(SYS_THREAD_EXIT);
 }
 
-
 void thread_dispatch() {
     syscall0(SYS_THREAD_DISPATCH);
 }
