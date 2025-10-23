@@ -2,7 +2,6 @@
 
 #include "../h/syscall_asm.hpp"
 #include "../h/syscall_codes.hpp"
-#include "../lib/console.h"
 
 using namespace SyscallAsm;
 
@@ -30,9 +29,7 @@ int thread_create(thread_t *handle, void (*start_routine)(void *), void *arg) {
     void* stack = mem_alloc(DEFAULT_STACK_SIZE);
     if (!stack) return -1;
 
-    void* stack_top = (char*)stack + DEFAULT_STACK_SIZE;
-
-    return (int)syscall4(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine, (uint64)arg, (uint64)stack_top);
+    return (int)syscall4(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine, (uint64)arg, (uint64)stack);
 }
 
 int thread_exit() {
