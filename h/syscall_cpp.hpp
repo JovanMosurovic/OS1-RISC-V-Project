@@ -52,6 +52,17 @@ private:
     sem_t myHandle;
 };
 
+// Periodic thread
+class PeriodicThread : public Thread {
+public:
+    void terminate ();
+protected:
+    PeriodicThread (time_t period);
+    virtual void periodicActivation () {}
+private:
+    time_t period;
+};
+
 // Console - used from lib
 
 class Console {

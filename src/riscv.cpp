@@ -6,7 +6,7 @@
 #include "../h/tcb.hpp"
 #include "../lib/console.h"
 
-void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal);
+void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64 arg4, uint64* retVal);
 
 void Riscv::popSppSpie()
 {
@@ -24,13 +24,15 @@ void Riscv::handleSupervisorTrap()
         uint64 volatile sstatus = r_sstatus();
 
         // System call arguments from registers
-        uint64 code, arg1, arg2, retVal;
+        uint64 code, arg1, arg2, arg3, arg4, retVal;
 
         __asm__ volatile ("mv %0, a0" : "=r"(code));
         __asm__ volatile ("mv %0, a1" : "=r"(arg1));
         __asm__ volatile ("mv %0, a2" : "=r"(arg2));
+        __asm__ volatile ("mv %0, a3" : "=r"(arg3));
+        __asm__ volatile ("mv %0, a4" : "=r"(arg4));
 
-        handleSystemCall(code, arg1, arg2, &retVal);
+        handleSystemCall(code, arg1, arg2, arg3, arg4, &retVal);
 
         // Return value -> a0
         __asm__ volatile ("mv a0, %0" : : "r"(retVal));

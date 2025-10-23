@@ -16,11 +16,29 @@ int mem_free(void *ptr) {
     return (int)syscall1(SYS_MEM_FREE, (uint64)ptr);
 }
 
+size_t mem_get_free_space() {
+    return (size_t)syscall0(SYS_MEM_GET_FREE_SPACE);
+}
+
+size_t mem_get_largest_free_block() {
+    return (size_t)syscall0(SYS_MEM_GET_LARGEST_FREE__BLOCK);
+}
+
 // Thread management
 
 int thread_create(thread_t *handle, void (*start_routine)(void *), void *arg) {
-    return (int)syscall3(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine, (uint64)arg);
+    void* stack = mem_alloc(DEFAULT_STACK_SIZE);
+    if (!stack) return -1;
+
+    void* stack_top = (char*)stack + DEFAULT_STACK_SIZE;
+
+    return (int)syscall4(SYS_THREAD_CREATE, (uint64)handle, (uint64)start_routine, (uint64)arg, (uint64)stack_top);
 }
+
+int thread_exit() {
+    return (int)syscall0(SYS_THREAD_EXIT);
+}
+
 
 void thread_dispatch() {
     syscall0(SYS_THREAD_DISPATCH);

@@ -8,10 +8,16 @@
 TCB *TCB::running = nullptr;
 
 
-TCB *TCB::createThread(Body body, void *arg, ThreadPrivilege priv) {
-    return new TCB(body, arg, priv);
+// For C API -> already allocated stack
+TCB *TCB::createThread(Body body, void *arg, void* stack_space) {
+    if (!body || !stack_space) return nullptr;
+    return new TCB(body, arg, stack_space, PRIVILEGE_USER);
 }
 
+// For already allocated stack
+TCB *TCB::createThreadSimple(Body body, void *arg, ThreadPrivilege priv) {
+    return new TCB(body, arg, priv);
+}
 
 TCB *TCB::createKernelThread(Body body, void* arg)
 {

@@ -5,14 +5,15 @@
 #include "../h/syscall_codes.hpp"
 #include "../lib/console.h"
 
-void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
+void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64 arg4, uint64* retVal) {
     switch (code) {
 
         // Memory management
 
         case SYS_MEM_ALLOC: {
             size_t size = (size_t)arg1;
-            void* ptr = MemoryAllocator::getInstance().allocate(size);
+            size_t blocks = (size + MEM_BLOCK_SIZE - 1) / MEM_BLOCK_SIZE;
+            void* ptr = MemoryAllocator::getInstance().allocate(blocks);
             *retVal = (uint64)ptr;
             break;
         }
@@ -42,14 +43,15 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64* retVal) {
             thread_t* handle = (thread_t*)arg1;
             using Body = void (*)(void*);
             Body start_routine = (Body)arg2;
+            void* arg = (void*)arg3;
+            void* stack_space = (void*)arg4;
 
-            if (!handle || !start_routine) {
+            if (!handle || !start_routine || !stack_space) {
                 *retVal = -1;
                 break;
             }
 
-            TCB* thread = TCB::createThread(start_routine);
-
+            TCB* thread = TCB::createThread(start_routine, arg, stack_space);
             if (!thread) {
                 *retVal = -2;
                 break;
