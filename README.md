@@ -129,7 +129,8 @@ These registers are accessible in both user and supervisor modes:
 | `x18-x27` / `s2-s11` | Saved | Callee-saved registers (preserved across function calls) |
 | `x28-x31` / `t3-t6` | Temporaries | Additional temporary registers (caller-saved) |
 
-**Note:** The compiler automatically preserves callee-saved registers (`s0-s11`) across function calls, while caller-saved registers (`t0-t6`, `a0-a7`) may be overwritten.
+> [!NOTE]
+> The compiler automatically preserves callee-saved registers (`s0-s11`) across function calls, while caller-saved registers (`t0-t6`, `a0-a7`) may be overwritten.
 
 ### System Registers (Supervisor Mode)
 
