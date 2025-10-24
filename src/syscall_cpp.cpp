@@ -2,7 +2,9 @@
 
 // Thread
 
-Thread::Thread(void(*body)(void *), void *arg) : myHandle(nullptr), body(body), arg(arg) {}
+Thread::Thread(void(*body)(void*), void* arg) : myHandle(nullptr), body(body), arg(arg) {}
+
+Thread::Thread() : myHandle(nullptr), body(nullptr), arg(nullptr) {}
 
 Thread::~Thread() {}
 
@@ -16,6 +18,8 @@ void Thread::threadWrapper(void *threadPtr) {
         // Virtual run() based thread
         thread->run();
     }
+
+    thread_exit();
 }
 
 int Thread::start() {
@@ -30,9 +34,6 @@ void Thread::dispatch() {
 int Thread::sleep(time_t) {
     // Not implemented
     return 0;
-}
-
-Thread::Thread() {
 }
 
 // Semaphore
@@ -54,13 +55,3 @@ int Semaphore::wait() {
 int Semaphore::signal() {
     return sem_signal(myHandle);
 }
-
-
-
-
-
-
-
-
-
-
