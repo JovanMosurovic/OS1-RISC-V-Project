@@ -5,7 +5,7 @@
 #include "../h/syscall_codes.hpp"
 #include "../lib/console.h"
 
-void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64 arg4, uint64* retVal) {
+uint64 handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64 arg4, uint64* retVal) {
     switch (code) {
 
         // Memory management
@@ -45,7 +45,7 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64
             void* arg = (void*)arg3;
             void* stack_space = (void*)arg4;
 
-            if (!handle || !start_routine || !stack_space) {
+            if (!handle || !stack_space) {
                 *retVal = -1;
                 break;
             }
@@ -148,4 +148,5 @@ void handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint64
             *retVal = 1;
             break;
     }
+    return *retVal;
 }

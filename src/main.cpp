@@ -9,23 +9,37 @@
 #include "../h/syscall_c.h"
 #include "../lib/console.h"
 
-extern void userMain();
+// extern void userMain();
 
 TCB* kernel = nullptr;
 TCB* user = nullptr;
+
+void test2() {
+    __putc('b');
+}
+
+void test1(void*) {
+    __putc('a');
+    test2();
+    __putc('c');
+}
 
 int main()
 {
 
     Riscv::w_stvec((uint64) &Riscv::supervisorTrap);
 
+    auto* x = (uint64*)(mem_alloc(64));
+    *x = 1;
+    __putc('0' + *x);
 
-    kernel = TCB::createKernelThread(nullptr, nullptr);
+
+    thread_create(&kernel, nullptr, nullptr);
     TCB::running = kernel;
 
-    user = TCB::createThread(reinterpret_cast<void (*)(void *)>(userMain), nullptr, mem_alloc(DEFAULT_STACK_SIZE));
+    thread_create(&user, test1, nullptr);
     while(!user->isFinished()) {
-        thread_dispatch();
+        TCB::dispatch();
     }
 
     return 0;
