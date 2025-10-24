@@ -36,6 +36,10 @@ int Thread::sleep(time_t) {
     return 0;
 }
 
+int Thread::getThreadId() {
+    return (int)thread_get_id();
+}
+
 // Semaphore
 
 Semaphore::Semaphore(unsigned init) : myHandle(nullptr) {

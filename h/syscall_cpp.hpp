@@ -25,6 +25,8 @@ public:
     static void dispatch();
     static int sleep(time_t);
 
+    static int getThreadId();
+
 protected:
     Thread();
     virtual void run() {}
