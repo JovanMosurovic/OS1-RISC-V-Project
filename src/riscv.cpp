@@ -3,6 +3,8 @@
 //
 
 #include "../h/riscv.hpp"
+
+#include "../h/print.hpp"
 #include "../h/tcb.hpp"
 #include "../lib/console.h"
 
@@ -69,5 +71,23 @@ void Riscv::handleSupervisorTrap()
     else
     {
         // unexpected trap cause
+        printS("=== KERNEL TRAP ===\n");
+        printS("Trap cause        : ");
+        printI(scause);
+        printS("\nInstruction addr  : ");
+        printI(r_sepc());
+        printS("\nRegister value    : ");
+        printI(r_stval());
+        printS("\n\nKernel stopped.\n");
+
+        __asm__ volatile (
+            "li a7, 8\n"
+            "li a6, 0\n"
+            "li a0, 0\n"
+            "li a1, 0\n"
+            "ecall\n"
+        );
+
+        while(1);
     }
 }
