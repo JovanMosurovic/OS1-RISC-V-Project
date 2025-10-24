@@ -64,7 +64,8 @@ The RISC-V architecture implements a hierarchical privilege model to provide sec
 - **U → S**: Triggered by `ecall` instruction (system calls), exceptions, or interrupts
 - **S → U**: Executed via `sret` instruction after completing kernel operations
 
-The current privilege mode is tracked by the hardware, and the `sstatus.SPP` bit stores the previous privilege level to enable proper mode restoration after trap handling.
+> [!TIP]
+> The current privilege mode is tracked by the hardware, and the `sstatus.SPP` bit stores the previous privilege level to enable proper mode restoration after trap handling.
 
 ## System Calls
 
@@ -186,9 +187,9 @@ System calls are invoked using the `ecall` instruction with parameters passed th
 
 The C API provides a procedural wrapper around the ABI layer, offering conventional function call interface. All functions handle argument preparation and invoke the corresponding system call via the `ecall` instruction.
 
-> **Note:** All C API functions and types are declared in `syscall_c.hpp`.
-> All C API functions declared in `syscall_c.hpp` and implemented using helper functions `syscall0` through `syscall4` 
-(corresponding to 0-4 parameters) that encapsulate the `ecall` instruction and register manipulation. !!!!!!!!!!!
+> [!NOTE]
+>  All C API functions and types are declared in `syscall_c.hpp` and implemented using helper functions `syscall0` through `syscall4` 
+(corresponding to 0-4 parameters) that encapsulate the `ecall` instruction and register manipulation.
 
 ### Memory Management
 
@@ -266,7 +267,8 @@ extern const size_t MEM_BLOCK_SIZE;          // Memory allocation block size
 ### C++ API
 
 Object-oriented wrapper providing modern C++ interface around the C API.
-> **Note:** All C++ API classes are declared in `syscall_cpp.hpp`.
+> [!NOTE]
+>  All C++ API classes are declared in `syscall_cpp.hpp`.
 > Global operator overloads are implemented in `operators.cpp`.
 
 ### Global Operators
@@ -384,7 +386,8 @@ Utility class providing access to console operations.
 
 ## Building and Running
 
-The project uses a `Makefile` for building and execution:
+> [!IMPORTANT]  
+> The project uses a `Makefile` for building and execution. Ensure you have the QEMU RISC-V emulator and cross-compilation toolchain installed.
 
 ### Build Commands
 ```bash
