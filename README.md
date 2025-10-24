@@ -25,6 +25,7 @@ and memory management in a controlled, single-processor environment.
 - [RISC-V Registers](#risc-v-registers)
   - [General Purpose Registers](#general-purpose-registers)
   - [System Registers (Supervisor Mode)](#system-registers-supervisor-mode)
+  - [System Constants](#system-constants)
 - [API Layers](#api-layers)
   - [ABI (Application Binary Interface)](#abi-application-binary-interface)
   - [C API](#c-api)
@@ -170,6 +171,19 @@ For comprehensive details about RISC-V registers, instruction encoding, and priv
 - The project [instructions.pdf](instructions.pdf) document, which contains architecture-specific details for this implementation
 - The official [RISC-V Specification](https://riscv.org/technical/specifications/) from RISC-V International
 
+### System Constants
+
+The following constants are declared in `hw.h` and defined in `hw.lib`:
+```c
+extern const size_t DEFAULT_STACK_SIZE;      // Default thread stack size
+extern const time_t DEFAULT_TIME_SLICE;      // Default thread time slice
+extern const void* HEAP_START_ADDR;          // Start of allocatable memory
+extern const void* HEAP_END_ADDR;            // End of allocatable memory
+extern const size_t MEM_BLOCK_SIZE;          // Memory allocation block size
+```
+> [!NOTE]
+> Additional hardware-related constants are available in `hw.h` and `hw.lib`. The constants listed above are the essential ones for basic understanding of the project.
+
 ## API Layers
 
 ### ABI (Application Binary Interface)
@@ -253,17 +267,6 @@ const int EOF = -1;
 |----------|-----------|-------------|
 | `getc` | `char getc()` | Reads one character from console input buffer. Blocks if buffer empty until character available. Returns character on success, `EOF` on error. |
 | `putc` | `void putc(char c)` | Writes character `c` to console output. |
-
-### System Constants
-
-The following constants are declared in `hw.h` and defined in `hw.lib`:
-```c
-extern const size_t DEFAULT_STACK_SIZE;      // Default thread stack size
-extern const time_t DEFAULT_TIME_SLICE;      // Default thread time slice
-extern const void* HEAP_START_ADDR;          // Start of allocatable memory
-extern const void* HEAP_END_ADDR;            // End of allocatable memory
-extern const size_t MEM_BLOCK_SIZE;          // Memory allocation block size
-```
 
 ### C++ API
 
