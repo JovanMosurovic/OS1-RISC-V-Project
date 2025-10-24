@@ -20,6 +20,8 @@ int thread_create(thread_t* handle, void(*start_routine)(void*), void* arg);
 int thread_exit();
 void thread_dispatch();
 
+uint64 thread_get_id();
+
 // Semaphore management
 int sem_open(sem_t* handle, uint64 init);
 int sem_close(sem_t handle);

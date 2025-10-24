@@ -13,6 +13,7 @@
 #define SYS_THREAD_CREATE                   0x11
 #define SYS_THREAD_EXIT                     0x12
 #define SYS_THREAD_DISPATCH                 0x13
+#define SYS_THREAD_GET_ID                   0x14
 
 // Semaphore management
 #define SYS_SEM_OPEN                        0x21

@@ -40,6 +40,10 @@ void thread_dispatch() {
     syscall0(SYS_THREAD_DISPATCH);
 }
 
+uint64 thread_get_id() {
+    return (uint64)syscall0(SYS_THREAD_GET_ID);
+}
+
 // Semaphore management
 
 int sem_open(sem_t *handle, uint64 init) {

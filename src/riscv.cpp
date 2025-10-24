@@ -72,13 +72,10 @@ void Riscv::handleSupervisorTrap()
     {
         // unexpected trap cause
         printS("=== KERNEL TRAP ===\n");
-        printS("Trap cause        : ");
-        printI(scause);
-        printS("\nInstruction addr  : ");
-        printI(r_sepc());
-        printS("\nRegister value    : ");
-        printI(r_stval());
-        printS("\n\nKernel stopped.\n");
+        printS("scause (Trap cause)      : "); printI(scause); printS("\n");
+        printS("sepc   (Instr. addr)     : "); printI(r_sepc()); printS("\n");
+        printS("stval  (Reg. value)      : "); printI(r_stval()); printS("\n");
+        printS("\nKernel stopped.\n");
 
         __asm__ volatile (
             "li a7, 8\n"

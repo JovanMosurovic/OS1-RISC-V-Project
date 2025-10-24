@@ -6,6 +6,7 @@
 #include "../h/riscv.hpp"
 
 TCB *TCB::running = nullptr;
+uint64 TCB::nextThreadId = 0;
 
 TCB * TCB::createThread(Body body, void *arg, void *stack) {
     return new TCB(body, arg, stack);

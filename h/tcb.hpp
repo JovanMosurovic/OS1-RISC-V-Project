@@ -25,6 +25,8 @@ public:
     ThreadPrivilege getPrivilege() const { return privilege; }
     void setPrivilege(ThreadPrivilege priv) { privilege = priv; }
 
+    uint64 getThreadId() const { return threadId; }
+
     using Body = void (*)(void*);
 
     static TCB* createThread(Body body, void* arg, void* stack);
@@ -42,6 +44,7 @@ private:
         this->arg = arg;
         this->stack = (uint64 *)stack;
         this->privilege = PRIVILEGE_USER;
+        this->threadId = nextThreadId++;
         this->context = {
             (uint64) &threadWrapper,
             this->stack != nullptr ? (uint64) &this->stack[STACK_SIZE] : 0
@@ -63,6 +66,9 @@ private:
     uint64 *stack;
     Context context;
     bool finished;
+    uint64 threadId;
+
+    static uint64 nextThreadId;
 
     friend class Riscv;
     friend class KernelSemaphore;
