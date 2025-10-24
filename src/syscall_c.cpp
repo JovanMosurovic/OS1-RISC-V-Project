@@ -74,12 +74,3 @@ char getc() {
 void putc(char character) {
     syscall1(SYS_PUTC, (uint64)character);
 }
-
-
-
-
-
-
-
-
-
