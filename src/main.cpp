@@ -11,7 +11,7 @@
 
 extern void userMain();
 
-const int NUM_THREADS = 20;
+const int NUM_THREADS = 3;
 
 struct WorkerArgs {
     int id;
@@ -33,6 +33,10 @@ void workerC(void* arg) {
         // busy wait
     }
 
+    printString("Thread ");
+    printInt(myId);
+    printString(" finished!\n");
+
     // if (arg) delete (WorkerArgs*)arg;
 
     thread_exit();
@@ -48,11 +52,9 @@ protected:
     void run() override {
         int myId = Thread::getThreadId();
 
-        for (int i = 0; i < 20; ++i) {
-            printString("Hello! Thread::");
-            printInt(myId);
-            printString("\n");
-        }
+        printString("Hello! Thread::");
+        printInt(myId);
+        printString("\n");
 
         for (volatile uint64 j = 0; j < (uint64)myId * 1000; ++j) {
             // busy wait
@@ -68,58 +70,23 @@ int main()
 {
     Riscv::w_stvec((uint64) &Riscv::supervisorTrap);
 
-    // ========== C API TEST ==========
-    thread_t kernel = nullptr;
-    thread_t user = nullptr;
-    thread_create(&kernel, nullptr, nullptr);
-    TCB::running = kernel;
-    thread_create(&user, userMainWrapper, nullptr);
-
+    // // ========== C API TEST ==========
+    // thread_t kernel = nullptr;
+    // thread_t user = nullptr;
+    // thread_create(&kernel, nullptr, nullptr);
+    // TCB::running = kernel;
+    // thread_create(&user, userMainWrapper, nullptr);
+    //
     // thread_t cThreads[NUM_THREADS];
     // for (int i = 0; i < NUM_THREADS; ++i) {
     //     thread_create(&cThreads[i], workerC, nullptr);
     // }
-
-    // sem_t sem;
-    // sem_open(&sem, 1);
-
-    while (!user->isFinished()) {
-        TCB::dispatch();
-    }
-
-    // THREADS WAITING
-    // bool allDone = false;
-    // while (!allDone) {
-    //     allDone = true;
-    //     for (int i = 0; i < NUM_THREADS; ++i) {
-    //         if (cThreads[i] && !cThreads[i]->isFinished()) {
-    //             allDone = false;
-    //             break;
-    //         }
-    //     }
-    //     if (!allDone) TCB::dispatch();
-    // }
-
-    // sem_close(sem);
-
-    // // ========== C++ API TEST ==========
-    // thread_t kernel = nullptr;
-    // thread_create(&kernel, nullptr, nullptr);
-    // TCB::running = kernel;
     //
-    // auto* cppUser = new Thread(userMainWrapper, nullptr);
-    // cppUser->start();
+    // // sem_t sem;
+    // // sem_open(&sem, 1);
     //
-    // // WorkerCPP* cppThreads[NUM_THREADS];
-    // // for (int i = 0; i < NUM_THREADS; ++i) {
-    // //     cppThreads[i] = new WorkerCPP();
-    // //     cppThreads[i]->start();
-    // // }
-    //
-    // // Semaphore* sem = new Semaphore(1);
-    //
-    // while (!cppUser->getHandle()->isFinished()) {
-    //     Thread::dispatch();
+    // while (!user->isFinished()) {
+    //     TCB::dispatch();
     // }
     //
     // // THREADS WAITING
@@ -127,17 +94,60 @@ int main()
     // // while (!allDone) {
     // //     allDone = true;
     // //     for (int i = 0; i < NUM_THREADS; ++i) {
-    // //         if (cppThreads[i]->getHandle() && !cppThreads[i]->getHandle()->isFinished()) {
+    // //         if (cThreads[i] && !cThreads[i]->isFinished()) {
     // //             allDone = false;
     // //             break;
     // //         }
     // //     }
-    // //     if (!allDone) Thread::dispatch();
+    // //     if (!allDone) TCB::dispatch();
     // // }
     //
-    // // delete sem;
-    // // delete cppUser;
-    // // for (int i = 0; i < NUM_THREADS; ++i) delete cppThreads[i];
+    // // sem_close(sem);
+
+    // ========== C++ API TEST ==========
+    thread_t kernel = nullptr;
+    thread_create(&kernel, nullptr, nullptr);
+    TCB::running = kernel;
+
+    // auto* cppUser = new Thread(userMainWrapper, nullptr);
+    // cppUser->start();
+
+    WorkerCPP* cppThreads[NUM_THREADS];
+    for (int i = 0; i < NUM_THREADS; ++i) {
+        cppThreads[i] = new WorkerCPP();
+        cppThreads[i]->start();
+    }
+
+    // Semaphore* sem = new Semaphore(1);
+
+    // while (!cppUser->getHandle()->isFinished()) {
+    //     Thread::dispatch();
+    // }
+
+    printString("Main: waiting for workers...\n");
+    cppThreads[0]->join();
+    printString("Thread 1 joined\n");
+    cppThreads[1]->join();
+    printString("Thread 2 joined\n");
+    cppThreads[2]->join();
+    printString("Thread 3 joined\n");
+
+    // THREADS WAITING
+    bool allDone = false;
+    while (!allDone) {
+        allDone = true;
+        for (int i = 0; i < NUM_THREADS; ++i) {
+            if (cppThreads[i]->getHandle() && !cppThreads[i]->getHandle()->isFinished()) {
+                allDone = false;
+                break;
+            }
+        }
+        if (!allDone) Thread::dispatch();
+    }
+
+    // delete sem;
+    // delete cppUser;
+    // for (int i = 0; i < NUM_THREADS; ++i) delete cppThreads[i];
 
     return 0;
 }

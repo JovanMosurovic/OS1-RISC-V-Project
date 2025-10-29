@@ -81,6 +81,17 @@ uint64 handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint
             break;
         }
 
+        case SYS_THREAD_JOIN: {
+            TCB* handle = (TCB*)arg1;
+
+            while (!(handle->isFinished())) {
+                TCB::dispatch();
+            }
+
+            *retVal = 0;
+            break;
+        }
+
         // Semaphore Management
         case SYS_SEM_OPEN: {
             sem_t* handle = (sem_t*)arg1;

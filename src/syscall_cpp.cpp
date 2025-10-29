@@ -27,6 +27,12 @@ int Thread::start() {
     return result;
 }
 
+void Thread::join() {
+    if (myHandle) {
+        return thread_join(&myHandle);
+    }
+}
+
 void Thread::dispatch() {
     thread_dispatch();
 }

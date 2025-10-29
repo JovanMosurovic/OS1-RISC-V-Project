@@ -44,6 +44,10 @@ uint64 thread_get_id() {
     return (uint64)syscall0(SYS_THREAD_GET_ID);
 }
 
+void thread_join(thread_t* handle) {
+    return (void)syscall1(SYS_THREAD_JOIN, (uint64)handle);
+}
+
 // Semaphore management
 
 int sem_open(sem_t *handle, uint64 init) {

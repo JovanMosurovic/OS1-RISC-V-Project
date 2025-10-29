@@ -22,6 +22,8 @@ void thread_dispatch();
 
 uint64 thread_get_id();
 
+void thread_join(thread_t* handle);
+
 // Semaphore management
 int sem_open(sem_t* handle, uint64 init);
 int sem_close(sem_t handle);
