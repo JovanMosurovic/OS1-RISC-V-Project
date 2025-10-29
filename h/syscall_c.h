@@ -22,6 +22,8 @@ void thread_dispatch();
 
 uint64 thread_get_id();
 
+void set_maximum_threads(int num_of_threads);
+
 // Semaphore management
 int sem_open(sem_t* handle, uint64 init);
 int sem_close(sem_t handle);

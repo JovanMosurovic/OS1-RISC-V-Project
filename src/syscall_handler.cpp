@@ -75,6 +75,7 @@ uint64 handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint
         case SYS_THREAD_GET_ID: {
             if (TCB::running) {
                 *retVal = TCB::running->getThreadId();
+                TCB::dispatch();
             } else {
                 *retVal = -1;
             }

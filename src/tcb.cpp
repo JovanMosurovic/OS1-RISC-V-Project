@@ -5,6 +5,10 @@
 #include "../h/tcb.hpp"
 #include "../h/riscv.hpp"
 
+uint64 TCB::maxThreads = 5;
+uint64 TCB::activeThreads = 0;
+List<TCB> TCB::blockedByMaxThreads;
+bool TCB::calledMaxThreads = false;
 TCB *TCB::running = nullptr;
 uint64 TCB::nextThreadId = 0;
 

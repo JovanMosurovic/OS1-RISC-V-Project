@@ -17,10 +17,21 @@ enum ThreadPrivilege {
 class TCB
 {
 public:
+    static uint64 maxThreads;
+    static uint64 activeThreads;
+    static List<TCB> blockedByMaxThreads;
+    static bool calledMaxThreads;
+
     ~TCB() { delete[] stack; }
 
     bool isFinished() const { return finished; }
-    void setFinished(bool value) { finished = value; }
+    void setFinished(bool value) {
+        finished = value;
+        if (value == true) {
+            Scheduler::put(blockedByMaxThreads.removeFirst());
+        }
+
+    }
 
     ThreadPrivilege getPrivilege() const { return privilege; }
     void setPrivilege(ThreadPrivilege priv) { privilege = priv; }
@@ -51,7 +62,19 @@ private:
         };
         this->finished = false;
 
-        if (body != nullptr) { Scheduler::put(this); }
+        if (body != nullptr) {
+            if (calledMaxThreads) {
+                activeThreads++;
+                if (activeThreads < maxThreads) {
+                    Scheduler::put(this);
+                } else {
+                    blockedByMaxThreads.addLast(this);
+                }
+            } else {
+                Scheduler::put(this);
+            }
+
+        }
     }
 
     struct Context

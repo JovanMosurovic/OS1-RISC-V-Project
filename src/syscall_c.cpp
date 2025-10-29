@@ -44,6 +44,10 @@ uint64 thread_get_id() {
     return (uint64)syscall0(SYS_THREAD_GET_ID);
 }
 
+void set_maximum_threads(int num_of_threads) {
+    return (void)syscall1(SYS_SET_MAX_THREADS, (uint64)num_of_threads);
+}
+
 // Semaphore management
 
 int sem_open(sem_t *handle, uint64 init) {
