@@ -27,6 +27,8 @@ public:
 
     static int getThreadId();
 
+    thread_t getHandle() const { return myHandle; }
+
 protected:
     Thread();
     virtual void run() {}
