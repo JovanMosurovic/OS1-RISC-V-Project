@@ -82,6 +82,15 @@ uint64 handleSystemCall(uint64 code, uint64 arg1, uint64 arg2, uint64 arg3, uint
             break;
         }
 
+        case SYS_SET_MAX_THREADS: {
+            uint64 num_of_threads = (uint64)arg1;
+
+            TCB::maxThreads = num_of_threads;
+            *retVal = 0;
+
+            break;
+        }
+
         // Semaphore Management
         case SYS_SEM_OPEN: {
             sem_t* handle = (sem_t*)arg1;
